@@ -1,6 +1,6 @@
 <% layout("layouts/boilerplate") %>
 <body>
-    <form method="POST" action="/listing/<%= listing._id %>?_method=PUT">
+    <form method="POST" action="/listing/<%= listing._id %>?_method=PUT" class="row">
         <!-- <input type="hidden" name="_method" value="PUT"> -->
         <h3>Update record</h3>
         <div class="col-md-6">
@@ -12,7 +12,7 @@
         <div class="col-md-6">
             <label for="exampleFormControlTextarea1" class="form-label">Description</label>
             <textarea class="form-control" name="listing[description]"
-                rows="3"><%= listing.description %></textarea>
+                rows="1"><%= listing.description %></textarea>
         </div>
         <div class="col-md-6">
             <label for="exampleFormControlInput1" class="form-label">Image</label>
@@ -33,10 +33,9 @@
             <input type="text" class="form-control" name="listing[country]" value="<%= listing.country %>"
                 placeholder="Enter country">
         </div>
-        <div class="col-md-12">
+         <div class="col-md-12" style="margin-bottom:2rem">
             </br>
-            <button class="btn btn-primary">Update</button>
+            <button class="btn btn-dark">Update</button>
         </div>
     </form>
 </body>
-<%- include('../includes/js_footer.ejs') %>

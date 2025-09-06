@@ -1,17 +1,27 @@
 <% layout("layouts/boilerplate") %>
-<body>
-    <h2>All Listing</h2>
-    <form methon="POSt" action="/listing/create">
+
+    <body>
+        <h2>All Listing</h2>
+        <!-- <form methon="POSt" action="/listing/create">
         <button>Create new Listing</button>
-    </form>
-    <ul>
-        <% for(let listing of allListing) { %>
-            <li>
-                <a href="/listings/<%= listing._id %>" target="_blank"><%= listing.title %></a> 
-                <button class="btn btn-primary-bg-wt"><a href="/listings/<%= listing._id %>/edit"><i class="fa-solid fa-pen-to-square"></i></a></button>
-                <button class="btn btn-primary-bg-wt"><a href="/listings/<%= listing._id %>/delete  "><i class="fa-solid fa-trash"></i></li>
-            </li>
-        <% } %>
-    </ul>
-</body>
-<%- include('../includes/js_footer.ejs') %>
+    </form> -->
+        <div class="row row-cols-lg-3 row-cols-md-3 row-cols-sm-1">
+            <% for(let listing of allListing) { %>
+                <div class="card col" style="width: 18rem;">
+                    <a href="/listings/<%= listing._id %>" target="_blank"><img src="<%= listing.img.url %>" class="card-img-top" alt="..."></a>
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <%= listing.title %>
+                        </h5>
+                        <p class="card-text">
+                            &#8377; <%= listing.price.toLocaleString("en-IN") %>/night
+                        </p>
+                        <!-- <a href="/listings/<%= listing._id %>" target="_blank"> <i class="fa-solid fa-eye"></i> </a>
+                        <a href="/listings/<%= listing._id %>/edit"><i class="fa-solid fa-pen-to-square"></i> </a>
+                        <a href="/listings/<%= listing._id %>/delete  "><i class="fa-solid fa-trash"></i></a> -->
+                    </div>
+                </div>
+            <% } %>
+        </div>
+
+    </body>
