@@ -1,0 +1,18 @@
+<%- include('../includes/header.ejs') %>
+<body>
+    <h2>All Listing</h2>
+    <form methon="POSt" action="/listing/create">
+        <button>Create new Listing</button>
+    </form>
+    <ul>
+        <% for(let listing of allListing) { %>
+            <li>
+                <a href="/listings/<%= listing._id %>" target="_blank"><%= listing.title %></a> 
+                <button class="btn btn-primary-bg-wt"><a href="/listings/<%= listing._id %>/edit"><i class="fa-solid fa-pen-to-square"></i></a></button>
+                <button class="btn btn-primary-bg-wt"><a href="/listings/<%= listing._id %>/delete  "><i class="fa-solid fa-trash"></i></li>
+            </li>
+        <% } %>
+    </ul>
+</body>
+<%- include('../includes/js_footer.ejs') %>
+</html>
