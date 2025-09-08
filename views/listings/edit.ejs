@@ -1,37 +1,73 @@
 <% layout("layouts/boilerplate") %>
 <body>
-    <form method="POST" action="/listing/<%= listing._id %>?_method=PUT" class="row">
+    <form method="POST" action="/listing/<%= listing._id %>?_method=PUT" class="row needs-validation" novalidate>
         <!-- <input type="hidden" name="_method" value="PUT"> -->
         <h3>Update record</h3>
         <div class="col-md-6">
             <!-- <input type="hidden" name="listing[id]" value="<%= listing._id  %>"> -->
             <label for="exampleFormControlInput1" class="form-label">Title</label>
             <input type="text" class="form-control" value="<%= listing.title %>" name="listing[title]"
-                placeholder="Enter title">
+                placeholder="Enter title" required>
+            <div class="valid-feedback">
+                Okk
+            </div>
+            <div id="validationServerUsernameFeedback" class="invalid-feedback">
+                Please Enter Title
+            </div>
         </div>
         <div class="col-md-6">
             <label for="exampleFormControlTextarea1" class="form-label">Description</label>
             <textarea class="form-control" name="listing[description]"
-                rows="1"><%= listing.description %></textarea>
+                rows="1" required><%= listing.description %></textarea>
+            <div class="valid-feedback">
+                Okk
+            </div>
+            <div id="validationServerUsernameFeedback" class="invalid-feedback">
+                Please Write Description
+            </div>
         </div>
         <div class="col-md-6">
             <label for="exampleFormControlInput1" class="form-label">Image</label>
-            <input type="url" class="form-control" value="<%= listing.img.url %>" name="listing[img][url]">
+            <input type="url" class="form-control" value="<%= listing.img.url %>" name="listing[img][url]" required>
+            <div class="valid-feedback">
+                Okk
+            </div>
+            <div id="validationServerUsernameFeedback" class="invalid-feedback">
+                Please Enter Image url
+            </div>
         </div>
         <div class="col-md-6">
             <label for="exampleFormControlInput1" class="form-label">Price</label>
             <input type="number" class="form-control" value="<%= listing.price %>" name="listing[price]"
-                placeholder="Enter price">
+                placeholder="Enter price" required>
+                <div class="valid-feedback">
+                Okk
+            </div>
+            <div id="validationServerUsernameFeedback" class="invalid-feedback">
+                Please Enter Price
+            </div>
         </div>
         <div class="col-md-6">
             <label for="exampleFormControlInput1" class="form-label">Location</label>
             <input type="text" class="form-control" value="<%= listing.location %>" name="listing[location]"
-                placeholder="Enter location">
+                placeholder="Enter location" required>
+                <div class="valid-feedback">
+                Okk
+            </div>
+            <div id="validationServerUsernameFeedback" class="invalid-feedback">
+                Please Enter your location
+            </div>
         </div>
         <div class="col-md-6">
             <label for="exampleFormControlInput1" class="form-label">Country</label>
             <input type="text" class="form-control" name="listing[country]" value="<%= listing.country %>"
-                placeholder="Enter country">
+                placeholder="Enter country" required>
+                 <div class="valid-feedback">
+                Okk
+            </div>
+            <div id="validationServerUsernameFeedback" class="invalid-feedback">
+                Please Enter country
+            </div>
         </div>
          <div class="col-md-12" style="margin-bottom:2rem">
             </br>

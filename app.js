@@ -5,8 +5,10 @@ import path from "path";
 import { fileURLToPath } from "url";
 import methodOverride from "method-override";
 import ejsMate from "ejs-mate";
-
-import Listing from "./models/listing.js"; // ESM import
+import wrapAsync from "./utils/wrapAsync.js";
+import ExpressError from "./utils/ExpressError.js";
+import listingSchema from "./schema.js";
+import Listing from "./models/listing.js";
 
 // __dirname, __filename banane ka tarika (ESM me default nahi hote)
 const __filename = fileURLToPath(import.meta.url);
@@ -21,7 +23,7 @@ app.use(methodOverride("_method"));
 app.engine("ejs",ejsMate);  
 app.use(express.static(path.join(__dirname,"public")));
 // Database connection
-const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
+const MONGO_URL = "mongodb://127.0.0.1:27017/relationDemo";
 
 async function main() {
     await mongoose.connect(MONGO_URL);
@@ -54,16 +56,22 @@ app.get("/listing/create", (req, res) => {
     }
 });
 // store data
-app.post("/listing", async (req, res) => {
-    try {
-        const listing = new Listing(req.body.listing);
-        await listing.save();
-        res.redirect("/listing");
-    } catch (err) {
-        console.log(err);
-        res.send("Error fatching listings");
+app.post("/listing", wrapAsync(async (req, res) => {
+    const { error } = listingSchema.validate(req.body);
+    if (error) {
+        // take first error message
+        const msg = error.details.map(el => el.message).join(",");
+        throw new ExpressError(400, msg);
     }
-});
+    // if(!req.body.listing){
+    //     throw new ExpressError(400 , "Send valid data for listing.");
+    // }
+    listingSchema.validate(req.body);
+    const listing = new Listing(req.body.listing);
+    await listing.save();
+    res.redirect("/listing");
+     
+}));
 // edit data
 app.get("/listings/:id/edit", async (req, res) => {
     try {
@@ -109,6 +117,16 @@ app.get("/listings/:id", async (req, res) => {
     }
 });
 
+// if route not found
+app.use((req, res, next) => {
+    next(new ExpressError(404, "Page not found"));
+});
+// error handler
+app.use((err, req, res, next) => {
+    const { statusCode = 500, message = "Something went wrong" } = err;
+    // res.status(statusCode).send(message); 
+    res.render("error.ejs",{message});
+});
 // Start server
 app.listen(8080, () => {
     console.log("🚀 Server is running on http://localhost:8080");

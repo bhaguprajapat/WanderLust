@@ -1,30 +1,66 @@
 <% layout("layouts/boilerplate") %>
 <body>
-    <form method="POST" action="/listing" class="row" style="margin:50px">
+    <form method="POST" action="/listing" class="row needs-validation" style="margin:50px" novalidate>
         <h3>Add new record</h3>
         <div class="col-md-6">
             <label for="exampleFormControlInput1" class="form-label">Title</label>
-            <input type="text" class="form-control" name="listing[title]" placeholder="Enter title">
+            <input type="text" class="form-control" name="listing[title]" placeholder="Enter title" required>
+            <div class="valid-feedback">
+                Okk
+            </div>
+            <div id="validationServerUsernameFeedback" class="invalid-feedback">
+                Please Enter Title
+            </div>
         </div>
         <div class="col-md-6">
             <label for="exampleFormControlTextarea1" class="form-label">Description</label>
-            <textarea class="form-control" name="listing[description]" rows="1"></textarea>
+            <textarea class="form-control" name="listing[description]" rows="1" required></textarea>
+            <div class="valid-feedback">
+                Okk
+            </div>
+            <div id="validationServerUsernameFeedback" class="invalid-feedback">
+                Please Write Description
+            </div>
         </div>
         <div class="col-md-6">
-            <label for="exampleFormControlInput1" class="form-label">Image</label>
-            <input type="url" class="form-control" name="listing[img][url]">
+            <label for="exampleFormControlInput1" class="form-label" >Image</label>
+            <input type="url" class="form-control" name="listing[img][url]" required>
+            <div class="valid-feedback">
+                Okk
+            </div>
+            <div id="validationServerUsernameFeedback" class="invalid-feedback">
+                Please Enter Image url
+            </div>
         </div>
         <div class="col-md-6">
             <label for="exampleFormControlInput1" class="form-label">Price</label>
-            <input type="number" class="form-control" name="listing[price]" placeholder="Enter price">
+            <input type="number" class="form-control" name="listing[price]" placeholder="Enter price" required>
+            <div class="valid-feedback">
+                Okk
+            </div>
+            <div id="validationServerUsernameFeedback" class="invalid-feedback">
+                Please Enter Price
+            </div>
         </div>
         <div class="col-md-6">
             <label for="exampleFormControlInput1" class="form-label">Location</label>
-            <input type="text" class="form-control" name="listing[location]" placeholder="Enter location">
+            <input type="text" class="form-control" name="listing[location]" placeholder="Enter location" required>
+            <div class="valid-feedback">
+                Okk
+            </div>
+            <div id="validationServerUsernameFeedback" class="invalid-feedback">
+                Please Enter your location
+            </div>
         </div>
         <div class="col-md-6">
             <label for="exampleFormControlInput1" class="form-label">Country</label>
-            <input type="text" class="form-control" name="listing[country]" placeholder="Enter country">
+            <input type="text" class="form-control" name="listing[country]" placeholder="Enter country" required>
+            <div class="valid-feedback">
+                Okk
+            </div>
+            <div id="validationServerUsernameFeedback" class="invalid-feedback">
+                Please Enter country
+            </div>
         </div>
         <div class="col-md-12">
             </br>
