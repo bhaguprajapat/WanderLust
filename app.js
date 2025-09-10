@@ -23,7 +23,7 @@ app.use(methodOverride("_method"));
 app.engine("ejs",ejsMate);  
 app.use(express.static(path.join(__dirname,"public")));
 // Database connection
-const MONGO_URL = "mongodb://127.0.0.1:27017/relationDemo";
+const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
 
 async function main() {
     await mongoose.connect(MONGO_URL);
@@ -57,15 +57,15 @@ app.get("/listing/create", (req, res) => {
 });
 // store data
 app.post("/listing", wrapAsync(async (req, res) => {
-    const { error } = listingSchema.validate(req.body);
-    if (error) {
-        // take first error message
-        const msg = error.details.map(el => el.message).join(",");
-        throw new ExpressError(400, msg);
-    }
-    // if(!req.body.listing){
-    //     throw new ExpressError(400 , "Send valid data for listing.");
+    // const { error } = listingSchema.validate(req.body);
+    // if (error) {
+    //     // take first error message
+    //     const msg = error.details.map(el => el.message).join(",");
+    //     throw new ExpressError(400, msg);
     // }
+    if(!req.body.listing){
+        throw new ExpressError(400 , "Send valid data for listing.");
+    }
     listingSchema.validate(req.body);
     const listing = new Listing(req.body.listing);
     await listing.save();
