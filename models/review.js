@@ -5,12 +5,12 @@ const Schema = mongoose.Schema;
 const reviewSchema=new Schema({
     comment:String,
     rating:{
-        type:number,
+        type:Number,
         min:0,
         max:5
     },
     createdAt:{
-        type:date,
+        type:Date,
         default:Date.now()
     }
 });

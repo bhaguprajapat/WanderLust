@@ -7,7 +7,7 @@
     </form> -->
         <div class="row row-cols-lg-3 row-cols-md-3 row-cols-sm-1">
             <% for(let listing of allListing) { %>
-                <div class="card col" style="width: 18rem;">
+                <div class="card col listing-card" style="width: 18rem;">
                     <a href="/listings/<%= listing._id %>" target="_blank"><img src="<%= listing.img.url %>" class="card-img-top" alt="..."></a>
                     <div class="card-body">
                         <h5 class="card-title">

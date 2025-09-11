@@ -7,8 +7,9 @@ import methodOverride from "method-override";
 import ejsMate from "ejs-mate";
 import wrapAsync from "./utils/wrapAsync.js";
 import ExpressError from "./utils/ExpressError.js";
-import listingSchema from "./schema.js";
+import {listingSchema, reviewSchema} from "./schema.js";
 import Listing from "./models/listing.js";
+import Review from "./models/review.js";
 
 // __dirname, __filename banane ka tarika (ESM me default nahi hote)
 const __filename = fileURLToPath(import.meta.url);
@@ -32,6 +33,17 @@ main()
     .then(() => console.log("✅ Database connected!"))
     .catch((err) => console.error("❌ DB connection error:", err));
 
+const validateReview=(req ,res,next)=>{
+    let {error}=reviewSchema.validate(res.body);
+    if(error){
+        let errMsg=error.details.map((el)=>el.message.join(","));
+        throw new ExpressError(400,errMsg);
+    }
+    else{
+        next();
+    }
+}
+
 // Home route
 app.get("/", (req, res) => {
     res.send("This is Home page");
@@ -40,7 +52,7 @@ app.get("/", (req, res) => {
 // Listing route
 app.get("/listing", async (req, res) => {
     try {
-        const allListing = await Listing.find({});
+        const allListing = await Listing.find({}).sort({_id:-1});
         res.render("listings/index", { allListing });
     } catch (err) {
         res.status(500).send("Error fetching listings");
@@ -110,12 +122,31 @@ app.get("/listings/:id/delete", async (req, res) => {
 app.get("/listings/:id", async (req, res) => {
     try {
         let { id } = req.params;
-        const listing = await Listing.findById(id);
+        const listing = await Listing.findById(id).populate("reviews");
         res.render("listings/show.ejs", { listing });
     } catch (err) {
         res.status(500).send("Error fetching listings");
     }
 });
+
+// store review
+app.post("/listing/:id/reviews",validateReview,wrapAsync(async (req , res)=>{
+    let listing=await Listing.findById(req.params.id);
+    let newReview=new Review(req.body.review);
+    listing.reviews.push(newReview);
+    await newReview.save();
+    await listing.save();
+    console.log("Review generated");
+    // res.send("New review saved !!");
+    res.redirect(`/listings/${listing._id}`);
+}));
+// delete review
+app.delete("/listing/:id/reviews/:reviewId",wrapAsync(async (req , res)=>{
+    let {id,reviewId}=req.params;
+    await Listing.findByIdAndUpdate(id,{$pull:{reviews:reviewId}});
+    await Review.findById(reviewId);
+    res.redirect(`/listings/${id}`);
+}));
 
 // if route not found
 app.use((req, res, next) => {
