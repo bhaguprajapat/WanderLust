@@ -53,6 +53,7 @@ app.get("/", (req, res) => {
 app.get("/listing", async (req, res) => {
     try {
         const allListing = await Listing.find({}).sort({_id:-1});
+        // res.send(allListing);
         res.render("listings/index", { allListing });
     } catch (err) {
         res.status(500).send("Error fetching listings");
