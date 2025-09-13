@@ -1,5 +1,7 @@
 import express from "express";
 const router=express.Router();
+
+
 // Index user
 router.get("/",(req,res)=>{
     res.send("Index posts !!.......");

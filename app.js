@@ -10,7 +10,7 @@ import ExpressError from "./utils/ExpressError.js";
 import {listingSchema, reviewSchema} from "./schema.js";
 import Listing from "./models/listing.js";
 import Review from "./models/review.js";
-
+import listingRoute from "./routes/listing.js";
 // __dirname, __filename banane ka tarika (ESM me default nahi hote)
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -43,111 +43,13 @@ const validateReview=(req ,res,next)=>{
         next();
     }
 }
-
 // Home route
 app.get("/", (req, res) => {
     res.send("This is Home page");
 });
+// listing routes
+app.use("/listings",listingRoute);
 
-// Listing route
-app.get("/listing", async (req, res) => {
-    try {
-        const allListing = await Listing.find({}).sort({_id:-1});
-        // res.send(allListing);
-        res.render("listings/index", { allListing });
-    } catch (err) {
-        res.status(500).send("Error fetching listings");
-    }
-});
-// create new data
-app.get("/listing/create", (req, res) => {
-    try {
-        res.render("listings/create.ejs");
-    } catch (err) {
-        console.log(err);
-        res.send("Error fatching listiings");
-    }
-});
-// store data
-app.post("/listing", wrapAsync(async (req, res) => {
-    // const { error } = listingSchema.validate(req.body);
-    // if (error) {
-    //     // take first error message
-    //     const msg = error.details.map(el => el.message).join(",");
-    //     throw new ExpressError(400, msg);
-    // }
-    if(!req.body.listing){
-        throw new ExpressError(400 , "Send valid data for listing.");
-    }
-    listingSchema.validate(req.body);
-    const listing = new Listing(req.body.listing);
-    await listing.save();
-    res.redirect("/listing");
-     
-}));
-// edit data
-app.get("/listings/:id/edit", async (req, res) => {
-    try {
-        let { id } = req.params;
-        const listing = await Listing.findById(id);
-        res.render("listings/edit.ejs", { listing });
-    } catch (err) {
-        res.send("500 , Something went wrong");
-    }
-});
-// update data
-app.put("/listing/:id", async (req, res) => {
-    try {
-        const { id } = req.params;
-        await Listing.findByIdAndUpdate(id, req.body.listing);
-        res.redirect("/listing");
-    } catch (err) {
-        res.send("Something went wrong");
-
-    }
-});
-
-
-// delete data
-app.get("/listings/:id/delete", async (req, res) => {
-    try {
-        let { id } = req.params;
-        let listing = await Listing.findByIdAndDelete(id);
-        console.log(listing);
-        res.redirect("/listing");
-    } catch (err) {
-        res.send("Something went wrong");
-    }
-});
-// Show routes
-app.get("/listings/:id", async (req, res) => {
-    try {
-        let { id } = req.params;
-        const listing = await Listing.findById(id).populate("reviews");
-        res.render("listings/show.ejs", { listing });
-    } catch (err) {
-        res.status(500).send("Error fetching listings");
-    }
-});
-
-// store review
-app.post("/listing/:id/reviews",validateReview,wrapAsync(async (req , res)=>{
-    let listing=await Listing.findById(req.params.id);
-    let newReview=new Review(req.body.review);
-    listing.reviews.push(newReview);
-    await newReview.save();
-    await listing.save();
-    console.log("Review generated");
-    // res.send("New review saved !!");
-    res.redirect(`/listings/${listing._id}`);
-}));
-// delete review
-app.delete("/listing/:id/reviews/:reviewId",wrapAsync(async (req , res)=>{
-    let {id,reviewId}=req.params;
-    await Listing.findByIdAndUpdate(id,{$pull:{reviews:reviewId}});
-    await Review.findById(reviewId);
-    res.redirect(`/listings/${id}`);
-}));
 
 // if route not found
 app.use((req, res, next) => {

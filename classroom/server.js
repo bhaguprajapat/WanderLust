@@ -1,12 +1,21 @@
 import express from "express";
 import userRoutes from "./routes/users.js";
 import posts from "./routes/posts.js";
+import cookieParser from "cookie-parser";
 const app=express();
 app.use(express.json()); 
 
+app.use(cookieParser());
+// cookies 
+app.get("/getcookies",(req , res)=>{
+    res.cookie("greet","hello");
+    res.send("send you some cookies");
+});
 // home root
 app.get("/",(req,res)=>{
-    res.send("This is home page !!.......");
+    
+    console.dir(req.cookies);
+    res.send(req.cookies);
 });
 
 
