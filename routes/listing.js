@@ -28,15 +28,15 @@ const validateReview=(req ,res,next)=>{
     }
 }
 // Listing route
-router.get("/", async (req, res) => {
-    try {
-        const allListing = await Listing.find({}).sort({_id:-1});
-        // res.send(allListing);
-        res.render("listings/index.ejs", { allListing });
-    } catch (err) {
-        res.status(500).send(`Error fetching listings ${err}`);
-    }
-});
+// router.get("/", async (req, res) => {
+//     try {
+//         const allListing = await Listing.find({}).sort({_id:-1});
+//         // res.send(allListing);
+//         res.render("listings/index.ejs", { allListing });
+//     } catch (err) {
+//         res.status(500).send(`Error fetching listings ${err}`);
+//     }
+// });
 // create new data
 router.get("/create", (req, res) => {
     try {
