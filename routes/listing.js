@@ -6,6 +6,7 @@ import {listingSchema, reviewSchema} from "../schema.js";
 import ExpressError from "../utils/ExpressError.js";
 import Listing from "../models/listing.js";
 import Review from "../models/review.js";
+import flash from "connect-flash";
 // import path from "path";
 
 // const app = express();
@@ -54,7 +55,8 @@ router.post("/", wrapAsync(async (req, res) => {
     listingSchema.validate(req.body);
     const listing = new Listing(req.body.listing);
     await listing.save();
-    res.redirect("/listings");
+    req.flash("success","New listing added !");
+    res.redirect("/");
      
 }));
 // edit data
@@ -72,7 +74,7 @@ router.put("/:id", async (req, res) => {
     try {
         const { id } = req.params;
         await Listing.findByIdAndUpdate(id, req.body.listing);
-        res.redirect("/listings");
+        res.redirect("/");
     } catch (err) {
         res.send("Something went wrong");
 
@@ -86,7 +88,7 @@ router.get("/:id/delete", async (req, res) => {
         let { id } = req.params;
         let listing = await Listing.findByIdAndDelete(id);
         console.log(listing);
-        res.redirect("/listings");
+        res.redirect("/");
     } catch (err) {
         res.send("Something went wrong");
     }

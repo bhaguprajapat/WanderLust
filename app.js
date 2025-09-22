@@ -11,6 +11,8 @@ import {listingSchema, reviewSchema} from "./schema.js";
 import Listing from "./models/listing.js";
 import Review from "./models/review.js";
 import listingRoute from "./routes/listing.js";
+import session from "express-session";
+import flash from "connect-flash";
 // __dirname, __filename banane ka tarika (ESM me default nahi hote)
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -26,6 +28,24 @@ app.use(express.static(path.join(__dirname,"public")));
 // Database connection
 const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
 
+const sessionOption={
+    secret:"mysupersecertcode",
+    resave:false,
+    saveUninitialized:true,
+    cookie:{
+        expires:Date.now()+7*24*60*60*1000, // + day* hours * min * seconds *milsec
+        maxAge: 7*24*60*60*1000,
+        httpOnly:true  
+    }
+
+};
+app.use(session(sessionOption));
+app.use(flash());
+// create middlware
+app.use((req,res,next)=>{
+    res.locals.success=req.flash("success");
+    next();
+});
 async function main() {
     await mongoose.connect(MONGO_URL);
 }
@@ -43,10 +63,6 @@ const validateReview=(req ,res,next)=>{
         next();
     }
 }
-// Home route
-// app.get("/", (req, res) => {
-//     res.send("This is Home page");
-// });
 app.get("/", async (req, res) => {
     try {
         const allListing = await Listing.find({}).sort({_id:-1});
