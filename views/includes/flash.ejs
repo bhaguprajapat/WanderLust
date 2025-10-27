@@ -1,0 +1,12 @@
+<% if (success && success.lenght) { %>
+ 
+<div class="alert alert-success alert-dismissible fade show col-6 offect-3" role="alert">
+    <%= success %>
+    <bustton type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></bustton>
+</div>
+<% } if(error && error.length) {%>
+<div class="alert alert-success alert-dismissible fade show col-6 offect-3" role="alert">
+    <%= error %>
+    <bustton type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></bustton>
+</div>
+<% } %>
