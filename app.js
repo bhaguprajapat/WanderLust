@@ -11,6 +11,7 @@ import {listingSchema, reviewSchema} from "./schema.js";
 import Listing from "./models/listing.js";
 import Review from "./models/review.js";
 import listingRoute from "./routes/listing.js";
+import UserRoute from "./routes/user.js";
 import session from "express-session";
 import flash from "connect-flash";
 import passport from "passport";
@@ -80,16 +81,17 @@ app.get("/", async (req, res) => {
         res.status(500).send(`Error fetching listings ${err}`);
     }
 });
-app.get("/demoUser",async(req,res)=>{
-    let fakeUser=new User({
-        email:"adminstudent@gmail.com",
-        username:"Delta-User"
-    });
-    let registerdUser=await User.register(fakeUser,"helloWorld"); // here helloWorld is our password
-    res.send(registerdUser);
-});
+// app.get("/demoUser",async(req,res)=>{
+//     let fakeUser=new User({
+//         email:"adminstudent@gmail.com",
+//         username:"Delta-User"
+//     });
+//     let registerdUser=await User.register(fakeUser,"helloWorld"); // here helloWorld is our password
+//     res.send(registerdUser);
+// });
 // listing routes
 app.use("/listings",listingRoute);
+app.use("/",UserRoute);
 
 
 // if route not found
