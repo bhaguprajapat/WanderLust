@@ -13,6 +13,9 @@ import Review from "./models/review.js";
 import listingRoute from "./routes/listing.js";
 import session from "express-session";
 import flash from "connect-flash";
+import passport from "passport";
+import LocalStrategy from "passport-local";
+import User from "./models/user.js";
 // __dirname, __filename banane ka tarika (ESM me default nahi hote)
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -41,6 +44,11 @@ const sessionOption={
 };
 app.use(session(sessionOption));
 app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 // create middlware
 app.use((req,res,next)=>{
     res.locals.success=req.flash("success");
@@ -71,6 +79,14 @@ app.get("/", async (req, res) => {
     } catch (err) {
         res.status(500).send(`Error fetching listings ${err}`);
     }
+});
+app.get("/demoUser",async(req,res)=>{
+    let fakeUser=new User({
+        email:"adminstudent@gmail.com",
+        username:"Delta-User"
+    });
+    let registerdUser=await User.register(fakeUser,"helloWorld"); // here helloWorld is our password
+    res.send(registerdUser);
 });
 // listing routes
 app.use("/listings",listingRoute);
