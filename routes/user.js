@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Router } from "express";
 const router=express.Router();
 import User from "../models/user.js";
 import passport from "passport";
@@ -16,6 +16,15 @@ router.post("/signUp",async(req,res)=>{
 });
 router.get("/login",(req,res)=>{
     res.render("users/login.ejs");
+});
+router.get("/logout",(req,res,next)=>{
+    req.logout((err)=>{
+        if(err){
+            next(err);
+        }
+        req.flash("success","You are logout successfully");
+        req.redirect("/listings");
+    });
 });
 router.post("/login",passport.authenticate("local",{failureRedirect:'login',failureFlash:true}),async(req,res)=>{
 
