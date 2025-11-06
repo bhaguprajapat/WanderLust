@@ -40,6 +40,10 @@ const validateReview=(req ,res,next)=>{
 // });
 // create new data
 router.get("/create", (req, res) => {
+    if(!req.isAuthenticated()){
+        req.flash("error","You must be logged in to create listing !");
+        res.redirect("/login");
+    }
     try {
         res.render("listings/create.ejs");
     } catch (err) {
